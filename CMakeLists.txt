@@ -1,4 +1,4 @@
-project(base_lib)
+project(yk_base_lib)
 
 #include_directories(${CMAKE_SOURCE_DIR}/3rdparty/spdlog/include/)
 #include_directories(${CMAKE_SOURCE_DIR}/3rdparty/spdlog/include/spdlog)
@@ -31,6 +31,8 @@ set(BASELIB_SOURCES
     str_util.cpp
     path_util.cpp
     win32_helper.cpp
+    msg_notifier.cpp
+    thread.cpp
 )
 
 set(D3DTexture_SOURCES
@@ -43,15 +45,18 @@ if(${YK_ENABLE_D3DTexture})
 endif()
 
 
-add_library(base_lib STATIC ${BASELIB_SOURCES})
+add_library(yk_base_lib STATIC ${BASELIB_SOURCES})
 
-#为 base_lib 目标设置一个接口包含目录，指向当前目录。
-#任何链接到 base_lib 的其他目标在编译时将会查找当前目录中的头文件。
-target_include_directories(base_lib INTERFACE .)
+#为 yk_base_lib 目标设置一个接口包含目录，指向当前目录。
+#任何链接到 yk_base_lib 的其他目标在编译时将会查找当前目录中的头文件。
+target_include_directories(yk_base_lib INTERFACE .)
 
 #不写这一句，无法include spdlog的头文件
-target_link_libraries(base_lib spdlog::spdlog_header_only)
+target_link_libraries(yk_base_lib 
+    Dexode::EventBus 
+    spdlog::spdlog_header_only
+)
 
-if(WIN32)
-    target_link_libraries(base_lib DirectXTex)
+if(WIN32 AND ${YK_ENABLE_D3DTexture})
+    target_link_libraries(yk_base_lib DirectXTex)
 endif()
