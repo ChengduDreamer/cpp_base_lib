@@ -24,14 +24,23 @@ add_compile_options(
     /JMC
 )
 
+
+
 set(BASELIB_SOURCES
 	yk_logger.cpp
     str_util.cpp
     path_util.cpp
     win32_helper.cpp
-    d3d_render.cpp
-    d3d_helper.cpp
 )
+
+set(D3DTexture_SOURCES
+    d3d_helper.cpp
+    d3d_render.cpp
+)
+
+if(${YK_ENABLE_D3DTexture})
+    list(APPEND BASELIB_SOURCES ${D3DTexture_SOURCES})
+endif()
 
 
 add_library(base_lib STATIC ${BASELIB_SOURCES})
