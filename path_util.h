@@ -15,6 +15,11 @@ namespace yk {
 
 #ifdef WIN32
 std::wstring GetModulePathW(HMODULE hModule);
+
+/*
+* suffix : \\app_name
+*/
+std::wstring GetProgramDataDir(const std::wstring& suffix);
 #endif // WIN32
 
 }
