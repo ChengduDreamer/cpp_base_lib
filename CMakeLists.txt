@@ -33,6 +33,7 @@ set(BASELIB_SOURCES
     win32_helper.cpp
     msg_notifier.cpp
     thread.cpp
+    file_util.cpp
 )
 
 set(D3DTexture_SOURCES
@@ -55,8 +56,11 @@ target_include_directories(yk_base_lib INTERFACE .)
 target_link_libraries(yk_base_lib 
     Dexode::EventBus 
     spdlog::spdlog_header_only
+    Qt5::Widgets Qt5::Core
 )
 
 if(WIN32 AND ${YK_ENABLE_D3DTexture})
     target_link_libraries(yk_base_lib DirectXTex)
 endif()
+
+
