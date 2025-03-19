@@ -19,7 +19,7 @@
 #include <Windows.h>
 #endif
 
-namespace tc
+namespace yk
 {
 
     class StringExt {

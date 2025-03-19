@@ -33,7 +33,8 @@ set(BASELIB_SOURCES
     win32_helper.cpp
     msg_notifier.cpp
     thread.cpp
-    file_util.cpp
+    file.cpp
+    data.cpp
 )
 
 set(D3DTexture_SOURCES
