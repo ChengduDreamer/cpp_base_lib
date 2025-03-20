@@ -1,5 +1,5 @@
 #include "file.h"
-
+#include <io.h> // 包含 _filelengthi64 和 _fileno 的声明
 #include "string_ext.h"
 #include "data.h"
 
@@ -28,12 +28,23 @@ std::optional<uint64_t> File::Size() {
     if (!IsOpen()) {
         return {};
     }
-#ifdef WIN32
-    _fseeki64(fp_, 0, SEEK_END);
+#ifdef WIN32 
+   /* _fseeki64(fp_, 0, SEEK_END);
     auto size = _ftelli64(fp_);
-    _fseeki64(fp_, 0, SEEK_SET);
+    _fseeki64(fp_, 0, SEEK_SET);*/
+
+    int fd = _fileno(fp_);
+    if (-1 == fd) {
+        perror("Failed to get file descriptor");
+        return {};
+    }
+    auto file_size = _filelengthi64(fd);
+    if (-1 == file_size) {
+        return {};
+    }
+    return { file_size };
 #endif
-    return size;
+    //return size;
 }
 
 std::optional<bool> File::IsEnd() {
