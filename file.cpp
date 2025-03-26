@@ -120,5 +120,14 @@ bool File::Seek(int64_t offset) {
     return 0 == _fseeki64(fp_, offset, SEEK_SET);
 }
 
+std::optional<int64_t> File::GetOffset() {
+    // 获取当前文件指针的偏移量
+    int64_t current_pos = _ftelli64(fp_);
+    if (-1 == current_pos) {
+        return {};
+    }
+    return { current_pos };
+}
+
 }
 

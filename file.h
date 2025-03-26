@@ -38,6 +38,8 @@ public:
 
     bool Seek(int64_t offset);
 
+    std::optional<int64_t> GetOffset();
+
 private:
     std::string file_path_;
     FILE* fp_ = nullptr;
