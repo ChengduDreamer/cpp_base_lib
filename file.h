@@ -13,9 +13,8 @@ typedef std::shared_ptr<Data> DataPtr;
 class File {
 public:
     static std::shared_ptr<File> OpenForReadB(const std::string& path);
-    //static std::shared_ptr<File> OpenForWriteB(const std::string& path);
-    //static std::shared_ptr<File> OpenForRWB(const std::string& path);
-    //static std::shared_ptr<File> OpenForAppendB(const std::string& path);
+    static std::shared_ptr<File> OpenForWriteB(const std::string& path);
+    static std::shared_ptr<File> OpenForAppendB(const std::string& path);
 
     File(const std::string& path, const std::string& mode);
     ~File();
@@ -29,6 +28,10 @@ public:
     DataPtr Read(uint64_t size);
 
     std::optional<uint64_t> Read(uint8_t* buf, uint64_t len);
+
+    std::optional<uint64_t> Write(uint8_t* buf, uint64_t len);
+
+    std::optional<uint64_t> Write(DataPtr data);
 
     std::optional<bool> IsEnd();
 

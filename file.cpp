@@ -10,6 +10,14 @@ std::shared_ptr<File> File::OpenForReadB(const std::string& path) {
     return std::make_shared<File>(path.c_str(), "rb");
 }
 
+std::shared_ptr<File> File::OpenForWriteB(const std::string& path) {
+    return std::make_shared<File>(path.c_str(), "wb");
+}
+
+std::shared_ptr<File> File::OpenForAppendB(const std::string& path) {
+    return std::make_shared<File>(path.c_str(), "ab+");
+}
+
 File::File(const std::string& path, const std::string& mode) {
     std::string origin_path = path;
     StringExt::Replace(origin_path, "\\", "/");
@@ -117,16 +125,39 @@ https://blog.csdn.net/yanbober/article/details/8696628  未经过实际测试
 */
 
 bool File::Seek(int64_t offset) {
+#ifdef WIN32
     return 0 == _fseeki64(fp_, offset, SEEK_SET);
+#endif
+    return false;
 }
 
 std::optional<int64_t> File::GetOffset() {
     // 获取当前文件指针的偏移量
+#ifdef WIN32
     int64_t current_pos = _ftelli64(fp_);
     if (-1 == current_pos) {
         return {};
     }
     return { current_pos };
+#endif
+    return {};
+}
+
+std::optional<uint64_t> File::Write(uint8_t* buf, uint64_t len) {
+    if (!IsOpen()) {
+        return {};
+    }
+    return fwrite(buf, 1, len, fp_);
+}
+
+std::optional<uint64_t> File::Write(DataPtr data) {
+    if (!data) {
+        return {};
+    }
+    if (!IsOpen()) {
+        return {};
+    }
+    return Write(reinterpret_cast<uint8_t*>(data->DataAddr()), data->Size());
 }
 
 }
